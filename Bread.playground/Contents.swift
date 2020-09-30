@@ -74,7 +74,7 @@ class GenerationFlow: Thread {
     
     @objc private func startCounter() {
         storage.addToStorage(Bread.make())
-        //print("положил в хранилище хлеб")
+        print("положил в хранилище хлеб")
         
     }
 }
@@ -94,7 +94,7 @@ class WorkFlow: Thread {
         while generationFlow.isExecuting == true || storage.storageIsEmpty == false {
                 let bread = storage.pickupFromStorage()
                 Bread.bake(bread)
-               // print("Забрал из хранилища хлеб и начинаю печь")
+                print("Забрал из хранилища хлеб и начинаю печь")
             
             }
         }
