@@ -1,0 +1,72 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3 effective-4.1.50 (swiftlang-1200.0.29.2 clang-1200.0.30.1)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 4 -enforce-exclusivity=checked -O -module-name DataProvider
+@_exported import DataProvider
+import Foundation
+import Swift
+import UIKit
+public protocol PhotoProviderProtocol {
+  func photos() -> [UIKit.UIImage]
+  func thumbnailPhotos() -> [UIKit.UIImage]
+}
+public struct Post {
+  public typealias Identifier = DataProvider.GenericIdentifier<DataProvider.Post>
+  public var id: DataProvider.Post.Identifier
+  public var author: DataProvider.User.Identifier
+  public var description: Swift.String
+  public var image: UIKit.UIImage
+  public var createdTime: Foundation.Date
+  public var currentUserLikesThisPost: Swift.Bool
+  public var likedByCount: Swift.Int
+  public var authorUsername: Swift.String
+  public var authorAvatar: UIKit.UIImage?
+}
+@_hasMissingDesignatedInitializers public class DataProviders {
+  public static let shared: DataProvider.DataProviders
+  final public let usersDataProvider: DataProvider.UsersDataProviderProtocol
+  final public let postsDataProvider: DataProvider.PostsDataProviderProtocol
+  final public let photoProvider: DataProvider.PhotoProviderProtocol
+  @objc deinit
+}
+public protocol PostsDataProviderProtocol : AnyObject {
+  func feed(queue: Dispatch.DispatchQueue?, handler: @escaping ([DataProvider.Post]?) -> Swift.Void)
+  func post(with postID: DataProvider.Post.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.Post?) -> Swift.Void)
+  func findPosts(by authorID: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping ([DataProvider.Post]?) -> Swift.Void)
+  func likePost(with postID: DataProvider.Post.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.Post?) -> Swift.Void)
+  func unlikePost(with postID: DataProvider.Post.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.Post?) -> Swift.Void)
+  func usersLikedPost(with postID: DataProvider.Post.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping ([DataProvider.User]?) -> Swift.Void)
+  func newPost(with image: UIKit.UIImage, description: Swift.String, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.Post?) -> Swift.Void)
+}
+public struct GenericIdentifier<T> : Swift.RawRepresentable, Swift.Hashable, Swift.ExpressibleByStringLiteral {
+  public let rawValue: Swift.String
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(rawValue: Swift.String)
+  public init(stringLiteral value: Swift.String)
+  public init(unicodeScalarLiteral value: Swift.String)
+  public init(extendedGraphemeClusterLiteral value: Swift.String)
+  public typealias StringLiteralType = Swift.String
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias UnicodeScalarLiteralType = Swift.String
+  public typealias RawValue = Swift.String
+}
+public struct User {
+  public typealias Identifier = DataProvider.GenericIdentifier<DataProvider.User>
+  public var id: DataProvider.User.Identifier
+  public var username: Swift.String
+  public var fullName: Swift.String
+  public var avatar: UIKit.UIImage?
+  public var currentUserFollowsThisUser: Swift.Bool
+  public var currentUserIsFollowedByThisUser: Swift.Bool
+  public var followsCount: Swift.Int
+  public var followedByCount: Swift.Int
+}
+public protocol UsersDataProviderProtocol : AnyObject {
+  func currentUser(queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.User?) -> Swift.Void)
+  func user(with userID: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.User?) -> Swift.Void)
+  func follow(_ userIDToFollow: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.User?) -> Swift.Void)
+  func unfollow(_ userIDToUnfollow: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping (DataProvider.User?) -> Swift.Void)
+  func usersFollowingUser(with userID: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping ([DataProvider.User]?) -> Swift.Void)
+  func usersFollowedByUser(with userID: DataProvider.User.Identifier, queue: Dispatch.DispatchQueue?, handler: @escaping ([DataProvider.User]?) -> Swift.Void)
+}
